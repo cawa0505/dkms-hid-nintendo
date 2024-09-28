@@ -4,6 +4,9 @@ A Nintendo HID kernel module.
 
 For any questions or bug reports, please refer to [hid_nintendo](https://github.com/DanielOgorchock/linux).
 
+## with this patch
+
+- [3rd Party Joycon Compatibility #40 by dietolive-tw](https://github.com/DanielOgorchock/linux/issues/40#issuecomment-2029009734)
 
 ## Installation
 
