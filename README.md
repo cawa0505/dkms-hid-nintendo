@@ -13,7 +13,7 @@ For any questions or bug reports, please refer to [hid_nintendo](https://github.
 Install it from source with:
 
 ```
-git clone https://github.com/nicman23/dkms-hid-nintendo
+git clone https://github.com/cawa0505/dkms-hid-nintendo
 cd dkms-hid-nintendo
 
 sudo dkms add .
