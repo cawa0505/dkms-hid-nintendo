@@ -2021,11 +2021,19 @@ static int joycon_read_info(struct joycon_ctlr *ctlr)
 	int ret;
 	int i;
 	int j;
-	struct joycon_subcmd_request req = { 0 };
+	/*struct joycon_subcmd_request req = { 0 };*/
+	struct joycon_subcmd_request *req;
 	struct joycon_input_report *report;
+	u8 buffer[sizeof(*req) + 38] = { 0 };
 
+	/*
 	req.subcmd_id = JC_SUBCMD_REQ_DEV_INFO;
 	ret = joycon_send_subcmd(ctlr, &req, 0, HZ);
+	*/
+	req = (struct joycon_subcmd_request *)buffer;
+
+	req->subcmd_id = JC_SUBCMD_REQ_DEV_INFO;
+	ret = joycon_send_subcmd(ctlr, req, 38, HZ);
 	if (ret) {
 		hid_err(ctlr->hdev, "Failed to get joycon info; ret=%d\n", ret);
 		return ret;
@@ -2146,6 +2154,25 @@ static int nintendo_hid_probe(struct hid_device *hdev,
 	ctlr->ctlr_state = JOYCON_CTLR_STATE_INIT;
 	ctlr->rumble_queue_head = JC_RUMBLE_QUEUE_SIZE - 1;
 	ctlr->rumble_queue_tail = 0;
+	
+#if 1
+	/* (k) */
+	{
+		int i;
+
+		for (i=0; i<JC_RUMBLE_QUEUE_SIZE; i++) {
+			ctlr->rumble_data[i][0] = 0x00;
+			ctlr->rumble_data[i][1] = 0x01;
+			ctlr->rumble_data[i][2] = 0x40;
+			ctlr->rumble_data[i][3] = 0x40;
+			ctlr->rumble_data[i][4] = 0x00;
+			ctlr->rumble_data[i][5] = 0x01;
+			ctlr->rumble_data[i][6] = 0x40;
+			ctlr->rumble_data[i][7] = 0x40;
+		}
+	}
+#endif
+
 	hid_set_drvdata(hdev, ctlr);
 	mutex_init(&ctlr->output_mutex);
 	init_waitqueue_head(&ctlr->wait);
